@@ -1,6 +1,4 @@
 #:kivy 1.0.9
-# ref: https://kivy.org/docs/tutorials/pong.html
-
 <Car>:
     size: 20, 10
     origin: 10, 5
@@ -17,7 +15,6 @@
 
 <Game>:
     car: game_car
-    
     canvas:
         Rectangle:
             pos: self.pos
@@ -27,4 +24,3 @@
     Car:
         id: game_car
         center: self.parent.center
-        
