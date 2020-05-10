@@ -167,12 +167,11 @@ class AutoGame(Widget):
             obs.save("thumbnail.jpg","JPEG")
             self.first_update = False
         # print("Update")
+        obs = self.get_state()
         # action = self.random_action()
         # obs = self.step(action)
         
         # Training
-        self.total_timesteps = 0
-        self.max_timesteps = 500000
         # We start the main loop over 500,000 timesteps
         if self.total_timesteps < self.max_timesteps:
             # If the episode is done
@@ -195,10 +194,12 @@ class AutoGame(Widget):
             
             # Before 10000 timesteps, we play random actions
             if self.total_timesteps < self.start_timesteps:
+                print("random Action ")
                 action = self.random_action()
                 obs = self.get_state()
             else: # After 10000 timesteps, we switch to the model
-                action = self.policy.select_action(np.array(obs))
+                print("Brain Action ")
+                action = self.policy.select_action(np.array(obs).reshape(1,40,40))
                 # If the explore_noise parameter is not 0, we add noise to the action and we clip it
                 if self.expl_noise != 0:
                     action = (action + np.random.normal(0, self.expl_noise, size=self.action_dim)).clip(-self.max_action, self.max_action)
@@ -254,8 +255,6 @@ class AutoGame(Widget):
                     self.done = False
             else:
                 reward -= 0.1
-
-            self.scores.append(self.policy.score())
 
             # We check if the episode is done
             done_bool = 0 if self.episode_timesteps + 1 == self._max_episode_steps else float(done)
